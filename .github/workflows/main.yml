@@ -1,17 +1,37 @@
-name: Cypress CI
-on: [push]
+#name: Cypress CI
+#on: [push]
+#jobs:
+ # cypress-run:
+  #  runs-on: ubuntu-latest
+  #  defaults:
+ #     run:
+ #       working-directory: ./cypress
+ #   steps:
+ #   - name: Checkout
+ #     uses: actions/checkout@v2.4.2
+ #   - name: Install dependencies
+ #     run: npm install
+ #   - name: Cypress.io
+  #    uses: cypress-io/github-action@v2.9.7
+  #    with:
+ #       working-directory: ./cypress
+
+name: Cypress Tests
+on:
+  pull_request:
+    branches:
+    - main
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./cypress
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2.4.2
-    - name: Install dependencies
-      run: npm install
-    - name: Cypress.io
-      uses: cypress-io/github-action@v2.9.7
-      with:
-        working-directory: ./cypress
+      - name: Checkout
+        uses: actions/checkout@main
+        
+      - name: Cypress run
+        uses: cypress-io/github-action@v5.1.0
+        with:
+          # Name of the browser to use
+          browser: electron
+          build: npm run build
+          start: npm start

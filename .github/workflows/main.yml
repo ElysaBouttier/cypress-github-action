@@ -24,13 +24,23 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@main
-        
-      - name: Cypress run
-        uses: cypress-io/github-action@v5.1.0
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build app
+        run: npm run build
+
+      - name: Start app
+        run: npm start &
+        env:
+          CI: true
+
+      - name: Wait for app to start
+        run: sleep 20
+
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v2
         with:
-          # Name of the browser to use
-          browser: electron
-          build: npm run build
+          browser: chrome
           start: npm start
+          wait-on: 'http://localhost:3000'
